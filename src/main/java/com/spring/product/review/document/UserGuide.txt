@@ -1,0 +1,36 @@
+Assumption:
+
+1. User, Product Catalogue and Product Review are under a single microservice.
+2. Genuine users can only provide reviews. (No spammed user)
+
+User [sql]
+1. can give review(review Score, comment) for a product.
+2. can view reviews given by other users on item basis.
+3. create user
+
+Product Catalogue -> [nosql] -> dynamo
+1. list on item
+2. aggregated score of item
+3. stores the users commented
+
+Product Review [sql]
+1. stateless application as no crucial data is required to be stored.
+2. stores rules
+3. given the item id, and user id -> compute score and inform product catalog
+4. can use python [django] -> for config management for internal purpose
+
+
+Provide comments to the review
+
+1. Create a seperate table:
+
+comment_id,
+comment,
+review_id [F.K]
+
+In the review table,
+List<CommentTable>
+
+2. Putting review id in the same table
+
+id, review_comment, score, user_id, review_id
